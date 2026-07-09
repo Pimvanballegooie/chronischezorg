@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Behandelprotocollen – Chronische Zorg Netwerk</title>
+  <meta name="description" content="Behandelprotocollen van het Chronische Zorg Netwerk: COPD, hartrevalidatie, chronische pijn, diabetes en meer. Elk protocol in een leesbare versie voor patiënten en een klinische versie voor therapeuten." />
+  <style>
+    
+    @font-face { font-family: 'Inter'; src: url('../fonts/inter-v20-latin-regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+    @font-face { font-family: 'Inter'; src: url('../fonts/inter-v20-latin-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+    @font-face { font-family: 'Inter'; src: url('../fonts/inter-v20-latin-700.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --teal: #2E86C1; --teal-light: #EAF3FA; --teal-dark: #246EA0;
+      --navy: #1F3A52; --navy-dark: #14283A;
+      --grey-bg: #F8F9FA; --grey-border: #E8ECF0;
+      --text: #1F3A52; --text-muted: #75828E; --white: #FFFFFF;
+    }
+    body { font-family: 'Inter', sans-serif; font-size: 16px; color: var(--text); background: var(--white); line-height: 1.7; }
+    header { background: var(--white); border-bottom: 1px solid var(--grey-border); position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .header-inner { max-width: 1100px; margin: 0 auto; padding: 0 clamp(1rem,4vw,2rem); display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo img { height: 44px; width: 44px; object-fit: contain; }
+    .logo-text { font-weight: 700; font-size: 0.95rem; color: var(--navy); }
+    .logo-text span { color: var(--teal); }
+    .terug-link { font-size: 0.85rem; font-weight: 600; color: var(--teal); text-decoration: none; white-space: nowrap; }
+    footer { background: var(--navy-dark); color: rgba(255,255,255,0.5); text-align: center; padding: 28px 24px; font-size: 0.82rem; margin-top: 56px; }
+    footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+    
+    .hero { background: linear-gradient(160deg, #3BAE8C 0%, #2E86C1 100%); position: relative; color: white; text-align: center; padding: 56px 24px 48px; }
+    .hero::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,0.32); }
+    .hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .hero h1 { font-size: clamp(1.7rem,4vw,2.4rem); font-weight: 700; margin-bottom: 12px; text-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .hero p { opacity: 0.92; font-size: 0.98rem; line-height: 1.7; }
+    .pagina { max-width: 1000px; margin: 0 auto; padding: 36px clamp(1rem,4vw,2rem) 64px; }
+    .zoek-rij { display: flex; gap: 10px; margin-bottom: 16px; }
+    .zoek-input { flex: 1; min-width: 0; padding: 12px 16px; border: 1.5px solid var(--grey-border); border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.92rem; outline: none; }
+    .zoek-input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(27,160,152,0.12); }
+    .zone-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+    .zone-filter { padding: 7px 15px; border-radius: 999px; border: 1.5px solid var(--grey-border); background: white; color: var(--text-muted); font-family: 'Inter', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .zone-filter:hover { border-color: var(--zk, var(--teal)); color: var(--zk, var(--teal)); }
+    .zone-filter.actief { background: var(--zk, var(--teal)); border-color: var(--zk, var(--teal)); color: white; }
+    .protocol-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .protocol-kaart { border: 1.5px solid var(--grey-border); border-radius: 16px; padding: 22px; background: white; display: flex; flex-direction: column; gap: 10px; transition: box-shadow 0.2s; }
+    .protocol-kaart:hover { box-shadow: 0 8px 28px rgba(0,0,0,0.09); }
+    .zone-badge { display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-size: 0.7rem; font-weight: 700; padding: 4px 12px; border-radius: 999px; color: white; }
+    .protocol-kaart h3 { font-size: 1rem; font-weight: 700; color: var(--navy); line-height: 1.35; }
+    .preview { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; }
+    .p-knoppen { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
+    .p-knop { display: block; text-align: center; padding: 10px; border-radius: 9px; font-size: 0.83rem; font-weight: 700; text-decoration: none; }
+    .p-knop.patient { background: var(--teal); color: white; }
+    .p-knop.patient:hover { background: var(--teal-dark); }
+    .p-knop.therapeut { background: var(--grey-bg); color: var(--navy); border: 1.5px solid var(--grey-border); }
+    .p-knop.therapeut:hover { border-color: var(--navy); }
+    .leeg-blok { text-align: center; padding: 56px 24px; background: var(--grey-bg); border: 1px solid var(--grey-border); border-radius: 16px; }
+    .geen-match { display: none; text-align: center; padding: 32px; color: var(--text-muted); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <img src="CZ_Logo.png" alt="Chronische Zorg Netwerk" />
+      <div class="logo-text"><span>Chronische</span> Zorg</div>
+    </a>
+    <a class="terug-link" href="protocollen.html">← Alle protocollen</a>
+  </div>
+</header>
+<section class="hero">
+  <div class="hero-content">
+    <h1>Behandelprotocollen</h1>
+    <p>Onze expertteams schrijven en onderhouden behandelprotocollen op basis van de laatste wetenschappelijke inzichten. Elk protocol is beschikbaar in een leesbare versie voor patiënten en een klinische versie voor therapeuten.</p>
+  </div>
+</section>
+<div class="pagina">
+  <div class="zoek-rij">
+    <input type="text" class="zoek-input" id="zoek-input" placeholder="🔍 Zoek bijv. COPD, etalagebenen, chronische pijn..." oninput="filterProtocollen()" />
+  </div>
+  <div class="zone-filters"><button class="zone-filter actief" data-zone="alle" onclick="filterZone(this)">Alle gebieden</button><button class="zone-filter" data-zone="longklachten" style="--zk:#C43A3A" onclick="filterZone(this)">🫁 Longklachten</button><button class="zone-filter" data-zone="etalagebenen" style="--zk:#C43A3A" onclick="filterZone(this)">🚶 Etalagebenen</button><button class="zone-filter" data-zone="hartrevalidatie" style="--zk:#C43A3A" onclick="filterZone(this)">❤️ Hartrevalidatie</button><button class="zone-filter" data-zone="oncologie" style="--zk:#2E86C1" onclick="filterZone(this)">🎗️ Oncologische revalidatie</button><button class="zone-filter" data-zone="chronische-pijn" style="--zk:#2E86C1" onclick="filterZone(this)">⚡ Chronische pijn</button><button class="zone-filter" data-zone="vermoeidheid" style="--zk:#2E86C1" onclick="filterZone(this)">😴 Chronische vermoeidheid</button><button class="zone-filter" data-zone="diabetes" style="--zk:#3BAE8C" onclick="filterZone(this)">🩸 Diabetes en bewegen</button><button class="zone-filter" data-zone="reuma-artrose" style="--zk:#3BAE8C" onclick="filterZone(this)">❤️ Reuma, artrose en botgezondheid</button><button class="zone-filter" data-zone="operatie" style="--zk:#3BAE8C" onclick="filterZone(this)">📋 Voorbereiding op operatie</button></div>
+  <div class="leeg-blok">
+      <div style="font-size:3rem;margin-bottom:12px">🦴</div>
+      <h3 style="color:var(--navy);margin-bottom:8px">Protocollen in ontwikkeling</h3>
+      <p style="color:var(--text-muted);font-size:0.9rem;max-width:440px;margin:0 auto">
+        Onze expertteams werken aan de eerste behandelprotocollen voor chronische aandoeningen.
+        Zodra een protocol is vastgesteld, verschijnt het hier.</p>
+    </div>
+  <div class="geen-match" id="geen-match">Geen protocollen gevonden voor deze zoekopdracht.</div>
+</div>
+<footer>
+  <p>© 2026 Chronische Zorg Netwerk · <a href="index.html">Home</a> · <a href="privacy.html">Privacyverklaring</a> · Onderdeel van het <a href="https://vindjefysio.net">VindJeFysio Netwerk</a></p>
+</footer>
+<script>
+let actieveZone = 'alle';
+function filterZone(knop) {
+  actieveZone = knop.dataset.zone;
+  document.querySelectorAll('.zone-filter').forEach(b => b.classList.toggle('actief', b === knop));
+  filterProtocollen();
+}
+function filterProtocollen() {
+  const q = (document.getElementById('zoek-input')?.value || '').toLowerCase().trim();
+  let zichtbaar = 0;
+  document.querySelectorAll('.protocol-kaart').forEach(k => {
+    const zoneOk = actieveZone === 'alle' || k.dataset.zone === actieveZone;
+    const zoekOk = !q || k.dataset.zoek.includes(q);
+    const toon = zoneOk && zoekOk;
+    k.style.display = toon ? 'flex' : 'none';
+    if (toon) zichtbaar++;
+  });
+  const geenMatch = document.getElementById('geen-match');
+  if (geenMatch) geenMatch.style.display = (zichtbaar === 0 && document.querySelector('.protocol-kaart')) ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
